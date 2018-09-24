@@ -1,5 +1,4 @@
 import os 
-import graph_util
 from PyQt5 import QtGui, QtCore, QtWidgets
 import Slots
 
@@ -69,7 +68,6 @@ class Node_graph(QtWidgets.QGraphicsView):
 
 		self.scene().addItem(nodeItem)
 		nodeItem.setPos(position - nodeItem.nodeCenter)
-
 		return nodeItem
 
 	def contextMenuEvent(self, event):
@@ -110,7 +108,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
 		painter.drawLines(lines)
 
 class Node(QtWidgets.QGraphicsItem):
-	def __init__(self,name):
+	def __init__(self,name,scene):
 		super(Node, self).__init__()
 		self.setZValue(1)
 		self.setAcceptHoverEvents(True)
@@ -161,6 +159,9 @@ class Node(QtWidgets.QGraphicsItem):
 		self._attrBrush_alt = QtGui.QBrush()
 		self._attrBrush_alt.setStyle(QtCore.Qt.SolidPattern)
 		self._attrBrush_alt.setColor(QtGui.QColor(180,180,180,255))
+
+		scene.addItem(self)
+		scene.views()[0].nodes.append(self)
 
 	@property
 	def height(self):
@@ -220,11 +221,12 @@ class Node(QtWidgets.QGraphicsItem):
 
 	def mouseMoveEvent(self,event):
 		# self.scene().updateScene()
-		for connection in graph_util.connections:
+		for connection in self.scene().views()[0].connections:
 			connection.updatePath()
 		super(Node, self).mouseMoveEvent(event)
 
 	def _remove(self):
+		self.scene().views()[0].nodes.remove(self)
 		for k in self.attrs_dict:
 			attr = self.attrs_dict[k]
 			if 'plug' in attr:

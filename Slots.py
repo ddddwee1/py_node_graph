@@ -1,5 +1,4 @@
 import os 
-import graph_util
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 NON_CONNECTABLE_COLOR = [120,120,120,120]
@@ -38,7 +37,7 @@ class SlotItem(QtWidgets.QGraphicsItem):
 		if len(self.connected_slots) >= self.max_conn:
 			return False
 
-		for conn in graph_util.connections:
+		for conn in self.scene().views()[0].connections:
 			tgt = conn.target
 			src = conn.src 
 			if (tgt==self and src==slot_item) or (src==self and src==slot_item):
@@ -66,8 +65,7 @@ class SlotItem(QtWidgets.QGraphicsItem):
 
 	def mousePressEvent(self,event):
 		if event.button()==QtCore.Qt.LeftButton:
-			self.new_conn = ConnectionItem(self.center(), self.mapToScene(event.pos()), self, None)
-			self.scene().addItem(self.new_conn)
+			self.new_conn = ConnectionItem(self.center(), self.mapToScene(event.pos()), self, None, self.scene())
 
 	def mouseMoveEvent(self,event):
 		self.new_conn.target_point = self.mapToScene(event.pos())
@@ -75,10 +73,10 @@ class SlotItem(QtWidgets.QGraphicsItem):
 
 	def mouseReleaseEvent(self,event):
 		self.new_conn.releaseEvent(event)
-		# print(len(graph_util.connections))
+		# print(len(self.scene().views()[0].connections))
 
 	def _remove(self):
-		for conn in graph_util.connections:
+		for conn in self.scene().views()[0].connections:
 			if conn.src == self or conn.target == self:
 				conn._remove()
 		self.scene().removeItem(self)
@@ -100,7 +98,7 @@ class PlugItem(SlotItem):
 		return rect
 
 class ConnectionItem(QtWidgets.QGraphicsPathItem):
-	def __init__(self, src_point, target_point, src, target):
+	def __init__(self, src_point, target_point, src, target, scene):
 		super(ConnectionItem,self).__init__()
 		self.setZValue(1)
 
@@ -114,11 +112,13 @@ class ConnectionItem(QtWidgets.QGraphicsPathItem):
 		self._pen = QtGui.QPen(QtGui.QColor())
 		self._pen.setColor(QtGui.QColor(*CONNECTABLE_COLOR))
 		self._pen.setWidth(2)
-		if not self in graph_util.connections:
-			graph_util.connections.append(self)
+
+		scene.addItem(self)
+
+		if not self in self.scene().views()[0].connections:
+			self.scene().views()[0].connections.append(self)
 
 	def mousePressEvent(self, event):
-
 		d2Target = (event.pos() - self.target_point).manhattanLength()
 		d2Source = (event.pos() - self.src_point).manhattanLength()
 
@@ -171,10 +171,11 @@ class ConnectionItem(QtWidgets.QGraphicsPathItem):
 				self._remove()
 
 	def _remove(self):
+		self.scene().views()[0].connections.remove(self)
 		scene = self.scene()
 		scene.removeItem(self)
-		# while self in graph_util.connections:
-		graph_util.connections.remove(self)
+		# while self in self.scene().views()[0].connections:
+		
 		scene.update()
 
 	def updatePath(self):
