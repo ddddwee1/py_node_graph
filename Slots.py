@@ -29,7 +29,7 @@ class SlotItem(QtWidgets.QGraphicsItem):
 		self.nodeRadius = 10
 
 	def accepts(self, slot_item):
-		if not (isinstance(self, PlugItem) or isinstance(slot_item, PlugItem)) and (isinstance(self, SocketItem) or isinstance(slot_item, SocketItem)):
+		if not ((isinstance(self, PlugItem) and isinstance(slot_item, SocketItem)) or (isinstance(self, SocketItem) and isinstance(slot_item, PlugItem))):
 			return False
 
 		if self.parentItem() == slot_item.parentItem():
@@ -74,7 +74,7 @@ class SlotItem(QtWidgets.QGraphicsItem):
 
 	def mouseReleaseEvent(self,event):
 		self.new_conn.releaseEvent(event)
-		print(len(graph_util.connections))
+		# print(len(graph_util.connections))
 
 class SocketItem(SlotItem):
 	def boundingRect(self):

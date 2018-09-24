@@ -65,6 +65,15 @@ class Node_graph(QtWidgets.QGraphicsView):
 
 		return nodeItem
 
+	def contextMenuEvent(self, event):
+		contextMenu = QtWidgets.QMenu(self)
+		newAct = contextMenu.addAction('New')
+		quitAct = contextMenu.addAction('Close')
+
+		action = contextMenu.exec_(self.mapToGlobal(event.pos()))
+		if action==quitAct:
+			self.close()
+
 
 class NodeScene(QtWidgets.QGraphicsScene):
 	def __init__(self,parent):
@@ -111,7 +120,7 @@ class Node(QtWidgets.QGraphicsItem):
 		self.baseHeight = 50
 		self.attrHeight = 30
 		self.radius = 10
-		self.border = 2
+		self.border = 0
 
 		self.nodeCenter = QtCore.QPointF()
 		self.nodeCenter.setX(self.baseWidth / 2.)
@@ -120,11 +129,11 @@ class Node(QtWidgets.QGraphicsItem):
 		self._pen = QtGui.QPen()
 		self._pen.setStyle(QtCore.Qt.SolidLine)
 		self._pen.setWidth(self.border)
-		self._pen.setColor(QtGui.QColor(100, 100, 100))
+		self._pen.setColor(QtGui.QColor(130, 130, 130,255))
 
 		self._brush = QtGui.QBrush()
 		self._brush.setStyle(QtCore.Qt.SolidPattern)
-		self._brush.setColor(QtGui.QColor(130,130,130,155))
+		self._brush.setColor(QtGui.QColor(130,130,130,255))
 
 		self._textPen = QtGui.QPen()
 		self._textPen.setStyle(QtCore.Qt.SolidLine)
