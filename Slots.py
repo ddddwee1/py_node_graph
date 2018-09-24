@@ -52,6 +52,7 @@ class SlotItem(QtWidgets.QGraphicsItem):
 		return path 
 
 	def paint(self, painter, option, widget):
+		painter.setRenderHint(painter.Antialiasing)
 		painter.setBrush(self.brush)
 		painter.setPen(self.pen)
 

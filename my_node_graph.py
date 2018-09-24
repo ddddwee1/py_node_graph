@@ -202,12 +202,14 @@ class Node(QtWidgets.QGraphicsItem):
 		offset = 0
 		for i,attr in enumerate(self.attrs):
 			rect = QtCore.QRect(self.border/2, self.baseHeight-self.radius+offset, self.baseWidth-self.border, self.attrHeight)
+			painter.setPen(self._pen)
 			if i%2==0:
 				painter.setBrush(self._attrBrush)
 			else:
 				painter.setBrush(self._attrBrush_alt)
 			painter.drawRect(rect)
 
+			painter.setPen(self._textPen)
 			painter.setFont(self._attrFont)
 
 			textRect = QtCore.QRect(rect.left()+self.radius, rect.top(), rect.width()-2*self.radius, rect.height())
