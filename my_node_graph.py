@@ -6,6 +6,8 @@ import Slots
 class Node_graph(QtWidgets.QGraphicsView):
 	def __init__(self, parent):
 		super(Node_graph,self).__init__(parent)
+
+		self.setRenderHint(QtGui.QPainter.Antialiasing)
 		self.state = 'DEFAULT'
 
 	def wheelEvent(self, event):
@@ -134,7 +136,7 @@ class Node(QtWidgets.QGraphicsItem):
 		self._pen = QtGui.QPen()
 		self._pen.setStyle(QtCore.Qt.SolidLine)
 		self._pen.setWidth(self.border)
-		self._pen.setColor(QtGui.QColor(130, 130, 130,150))
+		self._pen.setColor(QtGui.QColor(200, 200, 200,255))
 
 		self._pensel = QtGui.QPen()
 		self._pensel.setStyle(QtCore.Qt.SolidLine)
@@ -143,22 +145,22 @@ class Node(QtWidgets.QGraphicsItem):
 
 		self._brush = QtGui.QBrush()
 		self._brush.setStyle(QtCore.Qt.SolidPattern)
-		self._brush.setColor(QtGui.QColor(130,130,130,150))
+		self._brush.setColor(QtGui.QColor(200,200,200,255))
 
 		self._textPen = QtGui.QPen()
 		self._textPen.setStyle(QtCore.Qt.SolidLine)
-		self._textPen.setColor(QtGui.QColor(0,0,0,100))
+		self._textPen.setColor(QtGui.QColor(0,0,0,255))
 
 		self._nodeFont = QtGui.QFont('Arial',12,QtGui.QFont.Bold)
 		self._attrFont = QtGui.QFont('Arial',10,QtGui.QFont.Normal)
 
 		self._attrBrush = QtGui.QBrush()
 		self._attrBrush.setStyle(QtCore.Qt.SolidPattern)
-		self._attrBrush.setColor(QtGui.QColor(100,100,100,180))
+		self._attrBrush.setColor(QtGui.QColor(150,150,150,255))
 
 		self._attrBrush_alt = QtGui.QBrush()
 		self._attrBrush_alt.setStyle(QtCore.Qt.SolidPattern)
-		self._attrBrush_alt.setColor(QtGui.QColor(80,80,80,100))
+		self._attrBrush_alt.setColor(QtGui.QColor(180,180,180,255))
 
 	@property
 	def height(self):
@@ -178,7 +180,6 @@ class Node(QtWidgets.QGraphicsItem):
 		return path 
 
 	def paint(self, painter, option, widget):
-		painter.setRenderHint(painter.Antialiasing)
 		painter.setBrush(self._brush)
 		if self.isSelected():
 			painter.setPen(self._pensel)
