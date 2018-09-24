@@ -43,8 +43,13 @@ class Node_graph(QtWidgets.QGraphicsView):
 		self.state = 'DEFAULT'
 		super(Node_graph, self).mouseReleaseEvent(event)
 
-	def keyPressEvent(self, event):
-		pass
+	def keyPressEvent(self,event):
+		if event.key() == QtCore.Qt.Key_Delete:
+			self._removeSelectedNodes()
+
+	def _removeSelectedNodes(self):
+		for node in self.scene().selectedItems():
+			node._remove()
 
 	def initialize(self):
 
@@ -120,7 +125,7 @@ class Node(QtWidgets.QGraphicsItem):
 		self.baseHeight = 50
 		self.attrHeight = 30
 		self.radius = 10
-		self.border = 0
+		self.border = 2
 
 		self.nodeCenter = QtCore.QPointF()
 		self.nodeCenter.setX(self.baseWidth / 2.)
@@ -129,11 +134,16 @@ class Node(QtWidgets.QGraphicsItem):
 		self._pen = QtGui.QPen()
 		self._pen.setStyle(QtCore.Qt.SolidLine)
 		self._pen.setWidth(self.border)
-		self._pen.setColor(QtGui.QColor(130, 130, 130,255))
+		self._pen.setColor(QtGui.QColor(130, 130, 130,150))
+
+		self._pensel = QtGui.QPen()
+		self._pensel.setStyle(QtCore.Qt.SolidLine)
+		self._pensel.setWidth(self.border)
+		self._pensel.setColor(QtGui.QColor(170,80,80,250))
 
 		self._brush = QtGui.QBrush()
 		self._brush.setStyle(QtCore.Qt.SolidPattern)
-		self._brush.setColor(QtGui.QColor(130,130,130,255))
+		self._brush.setColor(QtGui.QColor(130,130,130,150))
 
 		self._textPen = QtGui.QPen()
 		self._textPen.setStyle(QtCore.Qt.SolidLine)
@@ -168,8 +178,12 @@ class Node(QtWidgets.QGraphicsItem):
 		return path 
 
 	def paint(self, painter, option, widget):
+		painter.setRenderHint(painter.Antialiasing)
 		painter.setBrush(self._brush)
-		painter.setPen(self._pen)
+		if self.isSelected():
+			painter.setPen(self._pensel)
+		else:
+			painter.setPen(self._pen)
 
 		painter.drawRoundedRect(0,0, self.baseWidth, self.height, self.radius, self.radius)
 
@@ -207,6 +221,17 @@ class Node(QtWidgets.QGraphicsItem):
 			connection.updatePath()
 		super(Node, self).mouseMoveEvent(event)
 
+	def _remove(self):
+		for k in self.attrs_dict:
+			attr = self.attrs_dict[k]
+			if 'plug' in attr:
+				attr['plug']._remove()
+			if 'socket' in attr:
+				attr['socket']._remove()
+		self.scene().removeItem(self)
+
+	
+
 	def createAttr(self, name, plug=False, socket=False):
 		self.attr_num += 1
 		self.attrs.append(name)
@@ -214,8 +239,10 @@ class Node(QtWidgets.QGraphicsItem):
 
 		if plug:
 			plug_inst = Slots.PlugItem(self, name)
+			self.attrs_dict[name]['plug'] = plug_inst
 		if socket:
 			socket_inst = Slots.SocketItem(self, name)
+			self.attrs_dict[name]['socket'] = socket_inst
 
 		self.update()
 

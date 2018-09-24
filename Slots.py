@@ -76,6 +76,12 @@ class SlotItem(QtWidgets.QGraphicsItem):
 		self.new_conn.releaseEvent(event)
 		# print(len(graph_util.connections))
 
+	def _remove(self):
+		for conn in graph_util.connections:
+			if conn.src == self or conn.target == self:
+				conn._remove()
+		self.scene().removeItem(self)
+
 class SocketItem(SlotItem):
 	def boundingRect(self):
 		width = height = self.parentItem().attrHeight * 0.5
@@ -166,8 +172,8 @@ class ConnectionItem(QtWidgets.QGraphicsPathItem):
 	def _remove(self):
 		scene = self.scene()
 		scene.removeItem(self)
-		while self in graph_util.connections:
-			graph_util.connections.remove(self)
+		# while self in graph_util.connections:
+		graph_util.connections.remove(self)
 		scene.update()
 
 	def updatePath(self):

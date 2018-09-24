@@ -8,16 +8,22 @@ node_graph = my_node_graph.Node_graph(None)
 node_graph.initialize()
 node_graph.show()
 
-nodea = node_graph.createNode('Node1')
-nodea.createAttr('attr1',plug=True,socket=True)
-nodea.createAttr('attr2')
+nodea = node_graph.createNode('Input')
+nodea.createAttr('DataOut',plug=True,socket=True)
 
-nodeb = node_graph.createNode('Node2')
-nodeb.createAttr('attr3',plug=True)
 
-nodec = node_graph.createNode('Node3')
-nodec.createAttr('attr4',plug=True)
-nodec.createAttr('attr5',socket=True)
+nodeb = node_graph.createNode('Conv1')
+nodeb.createAttr('DataIn',socket=True)
+nodeb.createAttr('DataOut',plug=True)
+
+nodec = node_graph.createNode('Add1')
+nodec.createAttr('DataIn1',socket=True)
+nodec.createAttr('DataIn2',socket=True)
+nodec.createAttr('DataOut',plug=True)
+
+noded = node_graph.createNode('Conv2')
+noded.createAttr('DataIn',socket=True)
+noded.createAttr('DataOut',plug=True)
 # end: graph main body
 
 app.exec_()
