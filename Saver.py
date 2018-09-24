@@ -34,23 +34,23 @@ def loadNodeType(fname):
 					isOverride = True
 		graph_util.typeDict[k] = buffDict[k]
 
-def saveGraph(fname, graph):
+def saveGraph(fname, nodeGraph):
 	nodes = []
-	for node in graph.nodes:
+	for node in nodeGraph.nodes:
 		nodes.append([node.name,node.nodeType])
 
 	conns = []
-	for conn in graph.connections:
+	for conn in nodeGraph.connections:
 		src = conn.src
 		target = conn.target 
 
 		# get attr index 
-		src_attr_ind = src.parent().attrs.index(src.attr)
-		target_attr_ind = target.parent().attrs.index(target.attr)
+		src_attr_ind = src.parentItem().attrs.index(src.attr)
+		target_attr_ind = target.parentItem().attrs.index(target.attr)
 
 		# get node index 
-		src_node_ind = graph.nodes.index(src.parent())
-		target_node_ind = graph.nodes.index(target.parent())
+		src_node_ind = nodeGraph.nodes.index(src.parentItem())
+		target_node_ind = nodeGraph.nodes.index(target.parentItem())
 
 		# get type 
 		if isinstance(src, Slots.SocketItem):
@@ -68,8 +68,8 @@ def saveGraph(fname, graph):
 
 	overAllgraph = {'nodes':nodes, 'connections':conns}
 
-	fout = open(fname)
-	fout.write(json.dumps(conns))
+	fout = open(fname,'w')
+	fout.write(json.dumps(overAllgraph))
 	fout.close()
 
 def loadGraph(fname, nodeGraph, clearGraph=False):
