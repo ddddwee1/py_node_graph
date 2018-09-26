@@ -1,1 +1,0 @@
-{"nodes": [["convNode1", "convNode"], ["convNode2", "convNode"], ["convNode3", "convNode"], ["addNode1", "addNode"]], "connections": [[0, 1, "plug", 1, 0, "socket"], [1, 1, "plug", 2, 0, "socket"], [2, 1, "plug", 3, 1, "socket"], [0, 1, "plug", 3, 0, "socket"]]}

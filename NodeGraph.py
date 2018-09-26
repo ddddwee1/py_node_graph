@@ -22,27 +22,21 @@ class NodeGraph(my_node_graph.Node_graph):
 		self.nodes = []
 		self.connections = []
 
-		self.inputNodes = []
-		self.outputNodes = []
-
 		self.graphName = graphName
 
 		self.initialize()
 		self.show()
 
-	def createNode(self,name,typeName,position=None,asInput=False,asOutput=False):
+	def createNode(self,name,typeName,position=None):
 		# create new node, auto append to NodeGraph.nodes
 		nodeItem = GraphNode(name,typeName, self.scene())
 		
 		# self.scene().addItem(nodeItem)
 		if position is None:
 			position = self.mapToScene(self.viewport().rect().center())
+		else:
+			position = QtCore.QPointF(position[0],position[1])
 		nodeItem.setPos(position - nodeItem.nodeCenter)
-
-		if asInput:
-			self.inputNodes.append(nodeItem)
-		if asInput:
-			self.outputNodes.append(nodeItem)
 
 		# self.nodes.append(nodeItem)
 		return nodeItem
@@ -51,7 +45,7 @@ class NodeGraph(my_node_graph.Node_graph):
 		# src are auto arranged as plug and target as socket 
 		src_slot = self.nodes[src_node_ind].plugs[src_attr_ind]
 
-		target_slot = self.nodes[target_node_ind].socket[target_attr_ind]
+		target_slot = self.nodes[target_node_ind].sockets[target_attr_ind]
 
 		# create new connection, auto append to NodeGraph.connections
 		Slots.ConnectionItem(src_slot.center(),target_slot.center(),src_slot,target_slot,self.scene())
@@ -67,6 +61,8 @@ class NodeGraph(my_node_graph.Node_graph):
 		outputAct = contextMenu.addAction('Output Block')
 		convAct = contextMenu.addAction('Conv Block')
 		fusionAct = contextMenu.addAction('Fusion Block')
+		fusion3Act = contextMenu.addAction('Fusion3 Block')
+		newAct = contextMenu.addAction('New')
 		saveAct = contextMenu.addAction('Save')
 		loadAct = contextMenu.addAction('Load')
 		quitAct = contextMenu.addAction('Close')
@@ -75,6 +71,8 @@ class NodeGraph(my_node_graph.Node_graph):
 		
 		if action==quitAct:
 			self.close()
+		elif action==newAct:
+			self._clear()
 		elif action==saveAct:
 			text, ok = QtWidgets.QInputDialog.getText(self, 'Save', 'Enter file name:')
 			if ok:
@@ -93,5 +91,7 @@ class NodeGraph(my_node_graph.Node_graph):
 				nodetype = 'convNode'
 			if action==fusionAct:
 				nodetype = 'addNode'
+			if action==fusion3Act:
+				nodetype = 'fusionNode3'
 			if ok:
 				self.createNode(text, nodetype)

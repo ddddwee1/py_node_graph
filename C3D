@@ -1,0 +1,1 @@
+{"nodes": [["stackFrames", "startNode", [994.0, 1427.0]], ["3DConvNet", "convNode", [1288.0, 1424.0]], ["prediction", "finalNode", [1609.0, 1454.0]]], "connections": [[0, 0, 1, 0], [1, 0, 2, 0]]}

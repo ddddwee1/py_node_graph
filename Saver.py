@@ -37,7 +37,7 @@ def loadNodeType(fname):
 def saveGraph(fname, nodeGraph):
 	nodes = []
 	for node in nodeGraph.nodes:
-		nodes.append([node.name,node.nodeType])
+		nodes.append([node.name,node.nodeType,[node.pos().x(),node.pos().y()]])
 
 	conns = []
 	for conn in nodeGraph.connections:
@@ -77,3 +77,5 @@ def loadGraph(fname, nodeGraph, clearGraph=False):
 
 	for conn_params in connections:
 		nodeGraph.createConnection(*conn_params)
+
+	nodeGraph.update()

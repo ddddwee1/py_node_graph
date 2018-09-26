@@ -115,6 +115,9 @@ class ConnectionItem(QtWidgets.QGraphicsPathItem):
 
 		scene.addItem(self)
 
+		if not ((src is None) or (target is None)):
+			self.updatePath()
+
 		if not self in self.scene().views()[0].connections:
 			self.scene().views()[0].connections.append(self)
 
@@ -192,7 +195,7 @@ class ConnectionItem(QtWidgets.QGraphicsPathItem):
 		dx = (self.target_point.x() - self.src_point.x()) * 0.5
 		dy = self.target_point.y() - self.src_point.y()
 		# print(dx)
-		if dx>0:
+		if dx>0 or (self.target is None) or (self.src is None):
 			ctrl1 = QtCore.QPointF(self.src_point.x()+dx, self.src_point.y()+dy*0)
 			ctrl2 = QtCore.QPointF(self.src_point.x()+dx, self.src_point.y()+dy*1)
 		else:
