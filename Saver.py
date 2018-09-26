@@ -45,32 +45,24 @@ def saveGraph(fname, nodeGraph):
 		target = conn.target 
 
 		# get attr index 
-		src_attr_ind = src.parentItem().attrs.index(src.attr)
-		target_attr_ind = target.parentItem().attrs.index(target.attr)
+		src_attr_ind = src.parentItem().plugs.index(src)
+		target_attr_ind = target.parentItem().sockets.index(target)
 
 		# get node index 
 		src_node_ind = nodeGraph.nodes.index(src.parentItem())
 		target_node_ind = nodeGraph.nodes.index(target.parentItem())
 
-		# get type 
-		if isinstance(src, Slots.SocketItem):
-			src_type = 'socket'
-		else:
-			src_type = 'plug'
-
-		if isinstance(target, Slots.SocketItem):
-			target_type = 'socket'
-		else:
-			target_type = 'plug'
+		# src are auto arranged as plugs and target as socket
 
 		# append to target
-		conns.append([src_node_ind,src_attr_ind,src_type,target_node_ind,target_attr_ind,target_type])
+		conns.append([src_node_ind,src_attr_ind,target_node_ind,target_attr_ind])
 
 	overAllgraph = {'nodes':nodes, 'connections':conns}
 
 	fout = open(fname,'w')
 	fout.write(json.dumps(overAllgraph))
 	fout.close()
+	return overAllgraph
 
 def loadGraph(fname, nodeGraph, clearGraph=False):
 	if clearGraph:

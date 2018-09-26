@@ -5,13 +5,13 @@ import Saver
 app = QtWidgets.QApplication([])
 
 # start: graph main body
-
 node_graph = NodeGraph.NodeGraph(None)
-node_graph.createNode('convNode1','convNode')
-node_graph.createNode('convNode2','convNode')
-node_graph.createNode('convNode3','convNode')
-node_graph.createNode('addNode1','addNode')
+# node_graph.createNode('Input','startNode')
+# node_graph.createNode('Conv','convNode')
+# node_graph.createNode('Classifier','convNode')
+# node_graph.createNode('Softmax','convNode')
+# node_graph.createNode('evalLayer','finalNode')
 # end: graph main body
 
 app.exec_()
-Saver.saveGraph('graph0.json', node_graph)
+# Saver.saveGraph('graph0.json', node_graph)

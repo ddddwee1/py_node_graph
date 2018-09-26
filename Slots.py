@@ -159,6 +159,7 @@ class ConnectionItem(QtWidgets.QGraphicsPathItem):
 			if slot.accepts(self.src):
 				self.target = slot
 				self.target_point = slot.center()
+				self._auto_swap_plug_and_socket()
 				self.updatePath()
 			else:
 				self._remove()
@@ -166,9 +167,14 @@ class ConnectionItem(QtWidgets.QGraphicsPathItem):
 			if slot.accepts(self.target):
 				self.src = slot 
 				self.src_point = slot.center()
+				self._auto_swap_plug_and_socket()
 				self.updatePath()
 			else:
 				self._remove()
+
+	def _auto_swap_plug_and_socket(self):
+		if isinstance(self.src, SocketItem):
+			self.src, self.src_point, self.target, self.target_point = self.target, self.target_point, self.src, self.src_point
 
 	def _remove(self):
 		self.scene().views()[0].connections.remove(self)
@@ -185,8 +191,13 @@ class ConnectionItem(QtWidgets.QGraphicsPathItem):
 		path.moveTo(self.src_point)
 		dx = (self.target_point.x() - self.src_point.x()) * 0.5
 		dy = self.target_point.y() - self.src_point.y()
-		ctrl1 = QtCore.QPointF(self.src_point.x()+dx, self.src_point.y()+dy*0)
-		ctrl2 = QtCore.QPointF(self.src_point.x()+dx, self.src_point.y()+dy*1)
+		# print(dx)
+		if dx>0:
+			ctrl1 = QtCore.QPointF(self.src_point.x()+dx, self.src_point.y()+dy*0)
+			ctrl2 = QtCore.QPointF(self.src_point.x()+dx, self.src_point.y()+dy*1)
+		else:
+			ctrl1 = QtCore.QPointF(self.src_point.x()-dx*1.5, self.src_point.y()+dy*0.5)
+			ctrl2 = QtCore.QPointF(self.src_point.x()+dx*3.5, self.src_point.y()+dy*0.5)
 		path.cubicTo(ctrl1, ctrl2, self.target_point)
 
 		self.setPath(path)

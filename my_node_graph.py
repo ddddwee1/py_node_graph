@@ -72,10 +72,12 @@ class Node_graph(QtWidgets.QGraphicsView):
 
 	def contextMenuEvent(self, event):
 		contextMenu = QtWidgets.QMenu(self)
-		newAct = contextMenu.addAction('New')
+		# newAct = contextMenu.addAction('New')
 		quitAct = contextMenu.addAction('Close')
 
 		action = contextMenu.exec_(self.mapToGlobal(event.pos()))
+
+		
 		if action==quitAct:
 			self.close()
 
@@ -119,6 +121,8 @@ class Node(QtWidgets.QGraphicsItem):
 
 		self.attrs = []
 		self.attrs_dict = {}
+		self.plugs = []
+		self.sockets = []
 		self.attr_num = 0
 
 		self.baseWidth = 200
@@ -245,9 +249,11 @@ class Node(QtWidgets.QGraphicsItem):
 		if plug:
 			plug_inst = Slots.PlugItem(self, name)
 			self.attrs_dict[name]['plug'] = plug_inst
+			self.plugs.append(plug_inst)
 		if socket:
 			socket_inst = Slots.SocketItem(self, name)
 			self.attrs_dict[name]['socket'] = socket_inst
+			self.sockets.append(socket_inst)
 
 		self.update()
 
