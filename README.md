@@ -18,8 +18,8 @@ The pre-def node types are stored in graph_util.py
 The structure of node types:
 
 ```
-Dict typeDict {key: str typeName, value: List attributes}
+Dict typeDict {str typeName : List attributes}
 List attributes [List attributeNames, Dict attributeProperty]
-Dict attributeProperty {key: str attributeName, value: Dict property}
-Dict property {'hasPlug':T/F, 'hasSocket':T/F}
+Dict attributeProperty {str attributeName : Dict property}
+Dict property {'hasPlug': bool, 'hasSocket': bool}
 ```
