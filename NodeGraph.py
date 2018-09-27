@@ -14,7 +14,7 @@ class GraphNode(my_node_graph.Node):
 			self.createAttr(attr, attrs_dict[attr]['hasPlug'], attrs_dict[attr]['hasSocket'])
 
 class NodeGraph(my_node_graph.Node_graph):
-	def __init__(self,parent,graphName=None):
+	def __init__(self,parent,graphName='MainModel'):
 		super().__init__(parent)
 		self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 		self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)

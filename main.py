@@ -16,4 +16,4 @@ node_graph = NodeGraph.NodeGraph(None)
 
 app.exec_()
 # Saver.saveGraph('graph0.json', node_graph)
-compiler.compile(node_graph)
+compiler.compile(node_graph, fname='temp_code.py')

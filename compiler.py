@@ -52,6 +52,7 @@ def construct_tree(graph_dict):
 	return root_nodes
 
 def compile(nodeGraph,fname=None):
+	graphName = nodeGraph.graphName
 	graph_dict = Saver.saveGraph('temp_graph.json',nodeGraph)
 
 	node_list = construct_tree(graph_dict)
@@ -62,7 +63,6 @@ def compile(nodeGraph,fname=None):
 	max_index = len(node_list)
 	while index<max_index:
 		node = node_list[index]
-
 		func_name = node.func
 
 		input_args = []
@@ -89,9 +89,16 @@ def compile(nodeGraph,fname=None):
 		# exception for outnode
 		if node.nodeType=='finalNode':
 			code_line = '%s %s'%(func_name,','.join(input_args))
-		lines.append(code_line)
+
+		# Naively add \t will cause further problem, modify this sometime in the future.
+		lines.append('\t'+code_line)
 
 		index+=1
+
+	# I will modify the function def here
+	first_line = 'def %s():'%graphName
+	lines.append(first_line)
+
 	lines = lines[::-1]
 	for line in lines:
 		print(line)
