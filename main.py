@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets
 import NodeGraph
 import Saver
+import compiler 
 
 app = QtWidgets.QApplication([])
 
@@ -15,3 +16,4 @@ node_graph = NodeGraph.NodeGraph(None)
 
 app.exec_()
 # Saver.saveGraph('graph0.json', node_graph)
+compiler.compile(node_graph)

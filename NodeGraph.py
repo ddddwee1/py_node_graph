@@ -8,7 +8,7 @@ class GraphNode(my_node_graph.Node):
 	def __init__(self, name, nodeType, scene):
 		super(GraphNode, self).__init__(name,scene)
 		self.nodeType = nodeType
-		attrs, attrs_dict = graph_util.typeDict[nodeType]
+		attrs, attrs_dict , _ = graph_util.typeDict[nodeType]
 
 		for attr in attrs:
 			self.createAttr(attr, attrs_dict[attr]['hasPlug'], attrs_dict[attr]['hasSocket'])
@@ -61,7 +61,6 @@ class NodeGraph(my_node_graph.Node_graph):
 		outputAct = contextMenu.addAction('Output Block')
 		convAct = contextMenu.addAction('Conv Block')
 		fusionAct = contextMenu.addAction('Fusion Block')
-		fusion3Act = contextMenu.addAction('Fusion3 Block')
 		newAct = contextMenu.addAction('New')
 		saveAct = contextMenu.addAction('Save')
 		loadAct = contextMenu.addAction('Load')
@@ -91,7 +90,5 @@ class NodeGraph(my_node_graph.Node_graph):
 				nodetype = 'convNode'
 			if action==fusionAct:
 				nodetype = 'addNode'
-			if action==fusion3Act:
-				nodetype = 'fusionNode3'
 			if ok:
 				self.createNode(text, nodetype)
