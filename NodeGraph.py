@@ -3,6 +3,7 @@ import graph_util
 import Slots
 from PyQt5 import QtGui, QtCore, QtWidgets
 import Saver
+import compiler
 
 class GraphNode(my_node_graph.Node):
 	def __init__(self, name, nodeType, scene):
@@ -64,6 +65,7 @@ class NodeGraph(my_node_graph.Node_graph):
 		newAct = contextMenu.addAction('New')
 		saveAct = contextMenu.addAction('Save')
 		loadAct = contextMenu.addAction('Load')
+		compAct = contextMenu.addAction('Compile')
 		quitAct = contextMenu.addAction('Close')
 
 		action = contextMenu.exec_(self.mapToGlobal(event.pos()))
@@ -80,6 +82,10 @@ class NodeGraph(my_node_graph.Node_graph):
 			text, ok = QtWidgets.QInputDialog.getText(self, 'Load', 'Enter file name:')
 			if ok:
 				Saver.loadGraph(text,self,True)
+		elif action==compAct:
+			text, ok = QtWidgets.QInputDialog.getText(self, 'Load', 'Enter file name:')
+			if ok:
+				compiler.compile(self,fname=text+'.py')
 		else:
 			text, ok = QtWidgets.QInputDialog.getText(self, 'Input dialog', 'Enter block name:')
 			if action==inputAct:
