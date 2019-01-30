@@ -23,3 +23,5 @@ List attributes [List attributeNames, Dict attributeProperty]
 Dict attributeProperty {str attributeName : Dict property}
 Dict property {'hasPlug': bool, 'hasSocket': bool}
 ```
+
+## The code will be re-organized
