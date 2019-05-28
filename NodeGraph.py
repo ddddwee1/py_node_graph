@@ -36,7 +36,8 @@ class NodeGraph(NodeGraphBase.NodeGraph):
 			position = self.mapToScene(self.viewport().rect().center())
 		else:
 			position = QtCore.QPointF(position[0],position[1])
-		nodeItem.setPos(position - nodeItem.nodeCenter)
+		# nodeItem.setPos(position - nodeItem.nodeCenter)
+		nodeItem.setPos(position)
 
 		# self.nodes.append(nodeItem)
 		return nodeItem

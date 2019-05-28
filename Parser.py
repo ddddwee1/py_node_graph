@@ -12,7 +12,9 @@ def serialize(saver):
 		node_id = n.node_id
 		node_type = n.nodeType
 		node_name = n.name 
-		node[node_id] = [node_type, node_name]
+		position = n.pos()
+		position = [position.x(), position.y()]
+		node[node_id] = [node_type, node_name, position]
 
 	conn = []
 	for c in connections:
@@ -42,8 +44,8 @@ def unserialize(graph, jsonstr):
 	nodes = data['Nodes']
 	node_dict = {}
 	for n_id in nodes:
-		n_type, n_name = nodes[n_id]
-		node = graph.createNode(n_name, n_type, n_id)
+		n_type, n_name, position = nodes[n_id]
+		node = graph.createNode(n_name, n_type, n_id, position)
 		node_dict[int(n_id)] = node 
 
 	conn = data['Connections']
