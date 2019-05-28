@@ -1,6 +1,5 @@
 import os 
 from PyQt5 import QtGui, QtCore, QtWidgets
-import Controller
 
 NON_CONNECTABLE_COLOR = [120,120,120,120]
 CONNECTABLE_COLOR = [150,150,0,150]
@@ -115,9 +114,6 @@ class ConnectionItem(QtWidgets.QGraphicsPathItem):
 		self._pen.setWidth(2)
 
 		scene.addItem(self)
-		scene.data_saver.add_connection(self)
-		self.connection_id = Controller.CONNECTION_ID
-		Controller.CONNECTION_ID += 1
 
 		if not ((src is None) or (target is None)):
 			self.updatePath()
@@ -186,12 +182,10 @@ class ConnectionItem(QtWidgets.QGraphicsPathItem):
 	def _remove(self):
 		self.scene().views()[0].connections.remove(self)
 		scene = self.scene()
-		scene.data_saver.remove_connection(self)
 		scene.removeItem(self)
 		# while self in self.scene().views()[0].connections:
 		
 		scene.update()
-
 
 	def updatePath(self):
 		self.updateSlotPos()

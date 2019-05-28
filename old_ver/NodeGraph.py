@@ -1,10 +1,11 @@
-import NodeGraphBase
+import my_node_graph
 import graph_util
 import Slots
 from PyQt5 import QtGui, QtCore, QtWidgets
-import Parser
+import Saver
+import compiler
 
-class GraphNode(NodeGraphBase.Node):
+class GraphNode(my_node_graph.Node):
 	def __init__(self, name, nodeType, scene):
 		super(GraphNode, self).__init__(name,scene)
 		self.nodeType = nodeType
@@ -13,7 +14,7 @@ class GraphNode(NodeGraphBase.Node):
 		for attr in attrs:
 			self.createAttr(attr, attrs_dict[attr]['hasPlug'], attrs_dict[attr]['hasSocket'])
 
-class NodeGraph(NodeGraphBase.NodeGraph):
+class NodeGraph(my_node_graph.Node_graph):
 	def __init__(self,parent,graphName='MainModel'):
 		super().__init__(parent)
 		self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -73,9 +74,18 @@ class NodeGraph(NodeGraphBase.NodeGraph):
 			self.close()
 		elif action==newAct:
 			self._clear()
+		elif action==saveAct:
+			text, ok = QtWidgets.QInputDialog.getText(self, 'Save', 'Enter file name:')
+			if ok:
+				Saver.saveGraph(text,self)
+		elif action==loadAct:
+			text, ok = QtWidgets.QInputDialog.getText(self, 'Load', 'Enter file name:')
+			if ok:
+				Saver.loadGraph(text,self,True)
 		elif action==compAct:
-			saver = self.scene().data_saver
-			print(Parser.serialize(saver))
+			text, ok = QtWidgets.QInputDialog.getText(self, 'Load', 'Enter file name:')
+			if ok:
+				compiler.compile(self,fname=text+'.py')
 		else:
 			text, ok = QtWidgets.QInputDialog.getText(self, 'Input dialog', 'Enter block name:')
 			if action==inputAct:
