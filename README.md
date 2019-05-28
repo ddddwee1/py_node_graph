@@ -6,13 +6,13 @@ I will re-name it once finish the first prototype.
 
 ## TO-DO
 
--[x] Main block window (finish on 5/27)
+-[x] Main block window (finished on 5/27)
 
--[x] Nodes & Connections with naive node definition (finish on 5/27)
+-[x] Nodes & Connections with naive node definition (finished on 5/27)
 
--[x] Serialization of node graph (finish on 5/28)
+-[x] Serialization of node graph (finished on 5/28)
 
--[ ] Unserialization of node graph
+-[x] Unserialization of node graph (finished on 5/28)
 
 -[ ] Modification of node definition
 

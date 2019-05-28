@@ -113,7 +113,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
 		painter.drawLines(lines)
 
 class Node(QtWidgets.QGraphicsItem):
-	def __init__(self,name,scene):
+	def __init__(self,name,scene, node_id=None):
 		super(Node, self).__init__()
 		self.setZValue(1)
 		self.setAcceptHoverEvents(True)
@@ -124,8 +124,8 @@ class Node(QtWidgets.QGraphicsItem):
 
 		self.attrs = []
 		self.attrs_dict = {}
-		self.plugs = []
-		self.sockets = []
+		self.plugs = {}
+		self.sockets = {}
 		self.attr_num = 0
 
 		self.baseWidth = 200
@@ -170,8 +170,11 @@ class Node(QtWidgets.QGraphicsItem):
 		scene.addItem(self)
 		scene.views()[0].nodes.append(self)
 
-		self.node_id = Controller.NODE_ID
-		Controller.NODE_ID += 1
+		if node_id is None:
+			self.node_id = Controller.NODE_ID
+			Controller.NODE_ID += 1
+		else:
+			self.node_id = node_id
 
 		scene.data_saver.add_node(self)
 
@@ -258,11 +261,11 @@ class Node(QtWidgets.QGraphicsItem):
 		if plug:
 			plug_inst = Slots.PlugItem(self, name)
 			self.attrs_dict[name]['plug'] = plug_inst
-			self.plugs.append(plug_inst)
+			self.plugs[name] = plug_inst
 		if socket:
 			socket_inst = Slots.SocketItem(self, name)
 			self.attrs_dict[name]['socket'] = socket_inst
-			self.sockets.append(socket_inst)
+			self.sockets[name] = socket_inst
 
 		self.update()
 

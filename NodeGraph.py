@@ -5,8 +5,8 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 import Parser
 
 class GraphNode(NodeGraphBase.Node):
-	def __init__(self, name, nodeType, scene):
-		super(GraphNode, self).__init__(name,scene)
+	def __init__(self, name, nodeType, scene, node_id=None):
+		super(GraphNode, self).__init__(name,scene, node_id)
 		self.nodeType = nodeType
 		attrs, attrs_dict , _ = graph_util.typeDict[nodeType]
 
@@ -27,9 +27,9 @@ class NodeGraph(NodeGraphBase.NodeGraph):
 		self.initialize()
 		self.show()
 
-	def createNode(self,name,typeName,position=None):
+	def createNode(self,name,typeName, node_id=None, position=None):
 		# create new node, auto append to NodeGraph.nodes
-		nodeItem = GraphNode(name,typeName, self.scene())
+		nodeItem = GraphNode(name,typeName, self.scene(), node_id)
 		
 		# self.scene().addItem(nodeItem)
 		if position is None:
@@ -41,12 +41,7 @@ class NodeGraph(NodeGraphBase.NodeGraph):
 		# self.nodes.append(nodeItem)
 		return nodeItem
 
-	def createConnection(self, src_node_ind, src_attr_ind, target_node_ind, target_attr_ind):
-		# src are auto arranged as plug and target as socket 
-		src_slot = self.nodes[src_node_ind].plugs[src_attr_ind]
-
-		target_slot = self.nodes[target_node_ind].sockets[target_attr_ind]
-
+	def createConnection(self, src_slot, target_slot):
 		# create new connection, auto append to NodeGraph.connections
 		Slots.ConnectionItem(src_slot.center(),target_slot.center(),src_slot,target_slot,self.scene())
 
@@ -73,9 +68,21 @@ class NodeGraph(NodeGraphBase.NodeGraph):
 			self.close()
 		elif action==newAct:
 			self._clear()
-		elif action==compAct:
-			saver = self.scene().data_saver
-			print(Parser.serialize(saver))
+		elif action==saveAct:
+			text, ok = QtWidgets.QInputDialog.getText(self, 'Input dialog', 'Enter file name:')
+			if ok:
+				saver = self.scene().data_saver
+				jsonstr = Parser.serialize(saver)
+				fout = open(text+'.json','w')
+				fout.write(jsonstr)
+				fout.close()
+		elif action==loadAct:
+			text, ok = QtWidgets.QInputDialog.getText(self, 'Input dialog', 'Enter file name:')
+			if ok:
+				f = open(text+'.json')
+				jsonstr = f.read()
+				f.close()
+				Parser.unserialize(self, jsonstr)
 		else:
 			text, ok = QtWidgets.QInputDialog.getText(self, 'Input dialog', 'Enter block name:')
 			if action==inputAct:
