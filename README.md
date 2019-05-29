@@ -6,23 +6,23 @@ I will re-name it once finish the first prototype.
 
 ## TO-DO
 
--[x] Main block window (finished on 5/27)
+- [x] Main block window (finished on 5/27)
 
--[x] Nodes & Connections with naive node definition (finished on 5/27)
+- [x] Nodes & Connections with naive node definition (finished on 5/27)
 
--[x] Serialization of node graph (finished on 5/28)
+- [x] Serialization of node graph (finished on 5/28)
 
--[x] Unserialization of node graph (finished on 5/28)
+- [x] Unserialization of node graph (finished on 5/28)
 
--[ ] Modification of node definition
+- [ ] Modification of node definition
 
--[ ] View & edit intrinsic properties of nodes 
+- [ ] View & edit intrinsic properties of nodes 
 
--[ ] Python code generator
+- [ ] Python code generator
 
--[ ] Modify the GUI
+- [ ] Modify the GUI
 
--[ ] Finish the prototype
+- [ ] Finish the prototype
 
 ### Requirement:
 
