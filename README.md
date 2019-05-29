@@ -14,7 +14,7 @@ I will re-name it once finish the first prototype.
 
 - [x] Unserialization of node graph (finished on 5/28)
 
-- [ ] Modification of node definition
+- [x] Modification of node definition (finished on 5/29)
 
 - [ ] View & edit intrinsic properties of nodes 
 

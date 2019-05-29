@@ -1,9 +1,62 @@
-typeDict = {'sampleNode':[['Attr1','Attr2'],{'Attr1':{'hasPlug':True,'hasSocket':True}, 'Attr2':{'hasPlug':True,'hasSocket':False}},'pass']}
+typeDict = {}
+typeDict['convNode'] = [
+							['x', 'out'],
+							{
+								'x':{'hasPlug':False, 'hasSocket':True},
+								'out':{'hasPlug':True, 'hasSocket':False}
+							},
+							{
+								'intrinsic':{
+									'size':3,
+									'outchn':16,
+									'stride':1,
+									'pad':'SAME',
+									'dilation_rate':1,
+									'usebias':True,
+									'batch_norm':False,
+									'activation':1
+								},
+								'CodeInit':[
+									'%s = M.ConvLayer(size=%d, outchn=%d, stride=%d, pad="%s", dilation_rate=%d, usebias=%d, batch_norm=%d, activation=%d)',
+									'__layerdef',
+									'size',
+									'outchn',
+									'stride',
+									'pad',
+									'dilation_rate',
+									'usebias',
+									'batch_norm',
+									'activation'
+								],
+								'CodeForward':[
+									'%s = self.%s(%s)',
+									'__layerout',
+									'__layerdef',
+									'x'
+								]
+							}
+						]
 
-typeDict['convNode'] = [['Input','Output'],{'Input':{'hasPlug':False,'hasSocket':True}, 'Output':{'hasPlug':True,'hasSocket':False}},'convLayer']
+typeDict['outNode'] = [
+							['x'],
+							{
+								'x':{'hasPlug':False, 'hasSocket':True}
+							},
+							{
+								'CodeForward':[
+									'return %s',
+									'x'
+								]
+							}
 
-typeDict['addNode'] = [['Input1','Input2','Output'],{'Input1':{'hasPlug':False,'hasSocket':True}, 'Input2':{'hasPlug':False,'hasSocket':True}, 'Output':{'hasPlug':True,'hasSocket':False}},'tf.add']
+						]
 
-typeDict['finalNode'] = [['Input'],{'Input':{'hasPlug':False,'hasSocket':True}},'return']
+typeDict['inNode'] = [
+							['x'],
+							{
+								'x':{'hasPlug':True, 'hasSocket':False}
+							},
+							{}
 
-typeDict['startNode'] = [['Output'],{'Output':{'hasPlug':True,'hasSocket':False}},'tf.placeholder']
+						]
+

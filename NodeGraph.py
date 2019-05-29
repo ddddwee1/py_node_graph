@@ -3,12 +3,18 @@ import graph_util
 import Slots
 from PyQt5 import QtGui, QtCore, QtWidgets
 import Parser
+import copy 
 
 class GraphNode(NodeGraphBase.Node):
 	def __init__(self, name, nodeType, scene, node_id=None):
 		super(GraphNode, self).__init__(name,scene, node_id)
 		self.nodeType = nodeType
-		attrs, attrs_dict , _ = graph_util.typeDict[nodeType]
+
+		nodeprop = graph_util.typeDict[nodeType]
+		attrs, attrs_dict = nodeprop[:2]
+		if len(nodeprop)>2:
+			if 'intrinsic' in nodeprop[2]:
+				self.intrinsic = copy.deepcopy(nodeprop[2]['intrinsic'])
 
 		for attr in attrs:
 			self.createAttr(attr, attrs_dict[attr]['hasPlug'], attrs_dict[attr]['hasSocket'])
@@ -87,12 +93,10 @@ class NodeGraph(NodeGraphBase.NodeGraph):
 		else:
 			text, ok = QtWidgets.QInputDialog.getText(self, 'Input dialog', 'Enter block name:')
 			if action==inputAct:
-				nodetype = 'startNode'
+				nodetype = 'inNode'
 			if action==outputAct:
-				nodetype = 'finalNode'
+				nodetype = 'outNode'
 			if action==convAct:
 				nodetype = 'convNode'
-			if action==fusionAct:
-				nodetype = 'addNode'
 			if ok:
 				self.createNode(text, nodetype)

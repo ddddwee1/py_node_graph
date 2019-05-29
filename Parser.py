@@ -14,7 +14,11 @@ def serialize(saver):
 		node_name = n.name 
 		position = n.pos()
 		position = [position.x(), position.y()]
-		node[node_id] = [node_type, node_name, position]
+		if not hasattr(n, 'intrinsic'):
+			intrinsic = None
+		else:
+			intrinsic = n.intrinsic
+		node[node_id] = [node_type, node_name, position, intrinsic]
 
 	conn = []
 	for c in connections:
@@ -53,3 +57,4 @@ def unserialize(graph, jsonstr):
 		src_slot = node_dict[src_id].attrs_dict[src_attr]['plug']
 		target_slot = node_dict[target_id].attrs_dict[target_attr]['socket']
 		graph.createConnection(src_slot, target_slot)
+
