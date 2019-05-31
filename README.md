@@ -1,6 +1,6 @@
 # py_node_graph
 
-I come back and remake this thing, finally.
+I will continue this when I have time. 
 
 I will re-name it once finish the first prototype.
 
