@@ -361,7 +361,6 @@ class ConnectionItem(QtWidgets.QGraphicsPathItem):
         if self.src is None:
             self.src_pos = event.pos()
         self.update_path()
-        super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event: 'QtWidgets.QGraphicsSceneMouseEvent') -> None:
         self._onMouseRelease(event)
