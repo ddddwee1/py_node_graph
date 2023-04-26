@@ -119,7 +119,9 @@ class NodeGraph(QtWidgets.QGraphicsView):
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Delete:
-            for n in self.scene().nodes:
+            nodes = self.scene().nodes
+            for i in range(len(nodes)-1, -1, -1):
+                n = nodes[i]
                 if n.isSelected():
                     n._remove()
 
@@ -236,7 +238,6 @@ class Node(QtWidgets.QGraphicsItem):
         self._textPenSmall.setStyle(Qt.SolidLine)
         self._textPenSmall.setColor(QColor(25,70,159,255))
 
-
         scene.addItem(self)
         scene.nodes.append(self)
         scene.saver.add_node(self)
@@ -245,8 +246,13 @@ class Node(QtWidgets.QGraphicsItem):
         self.plugs = []
         self.setTheme(self.theme)
 
+        metrics = QtGui.QFontMetrics(self._textFont)
+        self.baseHeight = self.text_h + max(len(self.sockets), len(self.plugs)) * 30 + 15 + metrics.boundingRect(self.text).height()*(self.text.count('\n')+1) + 5
+
     def setText(self, text):
         self.text = text
+        metrics = QtGui.QFontMetrics(self._textFont)
+        self.baseHeight = self.text_h + max(len(self.sockets), len(self.plugs)) * 30 + 15 + metrics.boundingRect(self.text).height()*(self.text.count('\n')+1) + 5
 
     def setTheme(self, theme):
         self.theme = theme % 5
@@ -274,16 +280,11 @@ class Node(QtWidgets.QGraphicsItem):
     def height(self):
         return self.baseHeight
 
-    def recomputeHeight(self):
-        metrics = QtGui.QFontMetrics(self._textFont)
-        self.baseHeight = self.text_h + max(len(self.sockets), len(self.plugs)) * 30 + 15 + metrics.boundingRect(self.text).height()*(self.text.count('\n')+1) + 5
-
     def boundingRect(self) -> QtCore.QRectF:
         rect = QtCore.QRectF(0,0, self.baseWidth, self.height)
         return rect 
 
     def paint(self, painter: QtGui.QPainter, option: 'QtWidgets.QStyleOptionGraphicsItem', widget: typing.Optional[QtWidgets.QWidget] = ...) -> None:
-        self.recomputeHeight()
         painter.setBrush(self._brush)
         if self.isSelected():
             painter.setPen(self._pensel)
@@ -373,7 +374,7 @@ class SlotItem(QtWidgets.QGraphicsItem):
 
     def setTheme(self, theme):
         if theme==0:
-            self._brush.setColor(QColor(25, 60, 90, 255))
+            self._brush.setColor(QColor(47, 85, 151, 255))
         elif theme==1:
             self._brush.setColor(QColor(108, 166, 68, 255))
         elif theme==2:
@@ -390,7 +391,6 @@ class SlotItem(QtWidgets.QGraphicsItem):
         return center
 
     def paint(self, painter: QtGui.QPainter, option: 'QtWidgets.QStyleOptionGraphicsItem', widget: typing.Optional[QtWidgets.QWidget] = ...) -> None:
-        # super().paint(painter, option, widget)
         painter.setBrush(self._brush)
         painter.setPen(self.current_pen)
         painter.drawEllipse(self.boundingRect())
@@ -456,7 +456,8 @@ class SlotItem(QtWidgets.QGraphicsItem):
         super().mouseReleaseEvent(event)
 
     def _remove(self):
-        for conn in self.conns:
+        for i in range(len(self.conns)-1, -1, -1):
+            conn = self.conns[i]
             conn._remove()
 
 class ConnectionItem(QtWidgets.QGraphicsPathItem):
@@ -640,7 +641,10 @@ class EditNodeDialog(QtWidgets.QDialog):
             res['plugs'] = []
             res['sockets'] = []
             res['text'] = self.box_text.toPlainText().replace('\\n', '\n')
-            res['theme'] = int(self.box_style.text()) % 5
+            try:
+                res['theme'] = int(self.box_style.text()) % 5
+            except:
+                res['theme'] = 0
 
             if plugs:
                 plugs = plugs.split('\n')

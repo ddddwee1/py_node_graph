@@ -19,4 +19,11 @@ Right-click to open menu
 - Ctrl+L: load
 - Ctrl+N: New graph
 
+<<<<<<< Updated upstream
+=======
+#### TODOs
+
+-[ ] Double click to edit node
+
+>>>>>>> Stashed changes
 ![fig](fig.png)
