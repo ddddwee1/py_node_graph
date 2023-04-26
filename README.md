@@ -1,29 +1,5 @@
 # py_node_graph
 
-I will continue this when I have time. 
-
-I will re-name it once finish the first prototype.
-
-## TO-DO
-
-- [x] Main block window (finished on 5/27)
-
-- [x] Nodes & Connections with naive node definition (finished on 5/27)
-
-- [x] Serialization of node graph (finished on 5/28)
-
-- [x] Unserialization of node graph (finished on 5/28)
-
-- [x] Modification of node definition (finished on 5/29)
-
-- [ ] View & edit intrinsic properties of nodes 
-
-- [ ] Python code generator
-
-- [ ] Modify the GUI
-
-- [ ] Finish the prototype
-
 ### Requirement:
 
 - PyQt5
@@ -33,19 +9,12 @@ I will re-name it once finish the first prototype.
 
 This is a naive implementation of node graph with PyQt.
 
-It is still in the testing process.
+Just run main.py
 
-Program entry: 'main_test.py'
+Right-click to open menu
 
-#### Pre-defined Node Type
+### Shortcut:
 
-The pre-def node types are stored in graph_util.py
-
-The structure of node types:
-
-```
-Dict typeDict {str typeName : List attributes}
-List attributes [List attributeNames, Dict attributeProperty]
-Dict attributeProperty {str attributeName : Dict property}
-Dict property {'hasPlug': bool, 'hasSocket': bool}
-```
+- Ctrl+S: save
+- Ctrl+L: load
+- Ctrl+N: New graph
