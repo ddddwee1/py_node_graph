@@ -321,6 +321,8 @@ class Node(QtWidgets.QGraphicsItem):
             self.sockets.append(slot)
         else:
             self.plugs.append(slot)
+        metrics = QtGui.QFontMetrics(self._textFont)
+        self.baseHeight = self.text_h + max(len(self.sockets), len(self.plugs)) * 30 + 15 + metrics.boundingRect(self.text).height()*(self.text.count('\n')+1) + 5
 
     def mouseMoveEvent(self, event: 'QtWidgets.QGraphicsSceneMouseEvent') -> None:
         for conn in self.scene().connections:
