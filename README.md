@@ -18,3 +18,5 @@ Right-click to open menu
 - Ctrl+S: save
 - Ctrl+L: load
 - Ctrl+N: New graph
+
+![fig](fig.png)
