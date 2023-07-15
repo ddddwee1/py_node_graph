@@ -19,7 +19,6 @@ Right-click to open menu
 - Ctrl+L: load
 - Ctrl+N: New graph
 
-<<<<<<< Updated upstream
 =======
 #### TODOs
 
