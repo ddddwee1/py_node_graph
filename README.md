@@ -23,6 +23,6 @@ Right-click to open menu
 =======
 #### TODOs
 
--[ ] Double click to edit node
+- [ ] Double click to edit node
 
 ![fig](fig.png)
