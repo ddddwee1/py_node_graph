@@ -25,5 +25,4 @@ Right-click to open menu
 
 -[ ] Double click to edit node
 
->>>>>>> Stashed changes
 ![fig](fig.png)
