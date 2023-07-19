@@ -4,6 +4,7 @@ from PyQt5.QtCore import QPoint, QPointF, Qt
 from PyQt5.QtGui import QBrush, QColor, QPen
 import Saver 
 import json 
+import glob
 
 class NodeScene(QtWidgets.QGraphicsScene):
     def __init__(self, parent):
@@ -48,6 +49,8 @@ class NodeGraph(QtWidgets.QGraphicsView):
         self.zoom_level = 1.0
         self.setWindowTitle('NodeGraph')
         self.filename = None
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
     def wheelEvent(self, event: QtGui.QWheelEvent) -> None:
         self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
@@ -94,8 +97,8 @@ class NodeGraph(QtWidgets.QGraphicsView):
         self.setScene(scene)
         print('Scene initialized.')
 
-        n1 = self.createNode('abc')
-        n1 = self.createNode('cde')
+        # n1 = self.createNode('abc')
+        # n1 = self.createNode('cde')
 
     def createNode(self, name, pos=None):
         nodeItem = Node(name, self.scene())
@@ -153,14 +156,6 @@ class NodeGraph(QtWidgets.QGraphicsView):
             data = self.scene().saver.serialize()
             json.dump(data, open(self.filename+'.json', 'w'), indent=4)
 
-    def _on_load(self):
-        text, ok = QtWidgets.QInputDialog.getText(self, 'Input dialog', 'Enter file name:')
-        if ok:
-            self.removeAllNodes()
-            data = json.load(open(text+'.json'))    
-            self.scene().saver.deserialize(data)
-            self.filename = text
-
     def contextMenuEvent(self, event):
         contextMenu = QtWidgets.QMenu(self)
         newAct = contextMenu.addAction('New')
@@ -174,7 +169,14 @@ class NodeGraph(QtWidgets.QGraphicsView):
         elif action==saveAct:
             self._on_save()
         elif action==loadAct:
-            self._on_load()
+            dialog = LoadFileDialog()
+            ret = dialog.exec_()
+            if ret:
+                res = dialog.get_values()
+                text = res
+                data = json.load(open(text +'.json'))
+                self.scene().saver.deserialize(data)
+                self.filename = text
         elif action==addAct:
             dialog = EditNodeDialog()
             ret = dialog.exec_()
@@ -228,12 +230,13 @@ class Node(QtWidgets.QGraphicsItem):
         self._titlebrush.setStyle(Qt.SolidPattern)
         self._titlebrush.setColor(QColor(68,114,196,255))
 
-        self._nodeFont = QtGui.QFont('Calibri', 25, QtGui.QFont.Bold)
+        self._nodeFont = QtGui.QFont('Times', 25, QtGui.QFont.Bold)
         # self.text_h = 20
         metrics = QtGui.QFontMetrics(self._nodeFont)
         self.text_h = metrics.boundingRect(self.name).height() + 14
+        self.baseWidth = max(metrics.boundingRect(self.name).width() + 30, self.baseWidth)
 
-        self._textFont = QtGui.QFont('Calibri', 14, QtGui.QFont.Bold)
+        self._textFont = QtGui.QFont('Times', 14, QtGui.QFont.Bold)
         self._textPenSmall = QtGui.QPen()
         self._textPenSmall.setStyle(Qt.SolidLine)
         self._textPenSmall.setColor(QColor(25,70,159,255))
@@ -363,7 +366,7 @@ class SlotItem(QtWidgets.QGraphicsItem):
         self._textPen = QPen()
         self._textPen.setStyle(Qt.SolidLine)
         self._textPen.setColor(QColor(0,0,0,255))
-        self._font = QtGui.QFont('Calibri', 10, 15) 
+        self._font = QtGui.QFont('Times', 10, 15) 
 
         self.is_socket = is_socket
         self.radius = 12
@@ -664,6 +667,47 @@ class EditNodeDialog(QtWidgets.QDialog):
             print(e)
             print('Error input text')
         return res 
+
+
+class LoadFileDialog(QtWidgets.QDialog):
+    def __init__(self):
+        super().__init__()
+        layout = QtWidgets.QVBoxLayout()
+        button_layout = QtWidgets.QHBoxLayout()
+
+        name_label = QtWidgets.QLabel()
+        name_label.setText('Files')
+        self.fileslist = QtWidgets.QListWidget(self)
+        layout.addWidget(name_label)
+        layout.addWidget(self.fileslist)
+
+        btn = QtWidgets.QPushButton('OK')
+        btn.pressed.connect(self.okok)
+        button_layout.addWidget(btn)
+
+        btn = QtWidgets.QPushButton('Cancel')
+        btn.pressed.connect(self.on_cancel)
+        button_layout.addWidget(btn)
+        layout.addLayout(button_layout)
+        self.setLayout(layout)
+        self.setWindowTitle('Load File')
+
+        files = glob.glob('./*.json')
+        for f in files:
+            f = f.replace('\\', '/').split('/')[-1].replace('.json', '')
+            item = QtWidgets.QListWidgetItem(f)
+            self.fileslist.addItem(item)
+
+    def okok(self):
+        self.done(1)
+
+    def on_cancel(self):
+        self.done(0)
+
+    def get_values(self):
+        name = self.fileslist.currentItem().text()
+        print(name)
+        return name 
 
 
 if __name__=='__main__':
