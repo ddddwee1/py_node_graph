@@ -5,23 +5,32 @@
 - PyQt5
 - Python 3.x
 
-### Description
+## Description
 
 This is a naive implementation of node graph with PyQt.
 
 Just run main.py
 
-Right-click to open menu
-
-### Shortcut:
-
-- Ctrl+S: save
-- Ctrl+L: load
-- Ctrl+N: New graph
 
 =======
-#### TODOs
+## TODOs
+
+### Graph 
 
 - [ ] Double click to edit node
 
+- [ ] Method to clear graph 
+
+### Saver
+
+- [ ] Serialization and deserialization of graph
+
+### Shortcut:
+
+- Ctrl+S: Save
+- Ctrl+L: Load
+- Ctrl+G: New Graph
+- Ctrl+N: New Node
+
 ![fig](fig.png)
+
